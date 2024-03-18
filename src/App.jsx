@@ -1,4 +1,5 @@
 import React from "react";
+import { AuthProvider } from "./components/auth.jsx";
 import { Routes, Route } from "react-router-dom";
 import { Home } from "./components/Home";
 // import { About } from "./components/About";
@@ -11,12 +12,15 @@ import { NewProducts } from "./components/NewProducts";
 import Users from "./components/Users";
 import UserDetails from "./components/UserDetails";
 import Admin from "./components/Admin";
+import Profile from "./components/Profile";
+import Login from "./components/Login";
+import RequireAuth from "./components/RequireAuth.jsx";
 
 //! lazy loading
 const LazyAbout = React.lazy(() => import("./components/About"));
 function App() {
   return (
-    <>
+    <AuthProvider>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -40,10 +44,19 @@ function App() {
           <Route path=":userId" element={<UserDetails />} />
           <Route path="admin" element={<Admin />} />
         </Route>
+        <Route
+          path="/profile"
+          element={
+            <RequireAuth>
+              <Profile />
+            </RequireAuth>
+          }
+        />
+        <Route path="/login" element={<Login />} />
 
         <Route path="*" element={<NoMatchRoute />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 
